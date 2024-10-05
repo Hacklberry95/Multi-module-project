@@ -32,7 +32,6 @@ public class UserService implements UserDetailsService {
     }
 
     public UserModel saveUser(UserModel user) {
-        // This method will now expect a hashed password
         return userRepository.save(user);
     }
 
@@ -47,7 +46,6 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
 
-        // Convert roles to authorities
         String[] rolesArray = user.getRoles().split(","); // Split comma-separated roles
         List<GrantedAuthority> authorities = Arrays.stream(rolesArray)
                                                    .map(SimpleGrantedAuthority::new)

@@ -35,12 +35,13 @@ public class AuthController {
         }
 
         try {
-            // Attempt authentication with the provided username and password
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            Authentication authentication1 = SecurityContextHolder.getContext().getAuthentication();
+            System.out.println("User authenticated: " + authentication1.getName());
             return ResponseEntity.ok("Login successful");
 
         } catch (BadCredentialsException e) {
