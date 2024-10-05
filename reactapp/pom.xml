@@ -37,7 +37,7 @@
                         <goals>
                             <goal>exec</goal>
                         </goals>
-                        <phase>compile</phase>
+                        <phase>package</phase> <!-- Change this phase to package -->
                         <configuration>
                             <executable>npm</executable>
                             <arguments>

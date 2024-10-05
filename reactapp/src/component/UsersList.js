@@ -4,14 +4,17 @@ import { getUsers } from '../actions/userActions';
 
 const UsersList = () => {
   const dispatch = useDispatch();
-
+  
   const userState = useSelector(state => state.user);
   const { users, loading, error } = userState;
 
   useEffect(() => {
     dispatch(getUsers());
-	console.log(users); // Log users data to inspect it
   }, [dispatch]);
+
+  useEffect(() => {
+    console.log(users); // Log users data to inspect it
+  }, [users]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.msg}</div>;

@@ -33,7 +33,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/login", "/logout").permitAll()
-                .requestMatchers("/api/**").authenticated()
+                .requestMatchers("/api/**").permitAll() // TODO: .authenticated when we deploy
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
