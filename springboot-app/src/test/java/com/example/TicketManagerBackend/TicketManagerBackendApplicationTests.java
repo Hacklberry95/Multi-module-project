@@ -3,9 +3,9 @@ package com.example.TicketManagerBackend;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import TicketManagerBackend.TicketManagerBackendApplication;
+import springbootapp.Springbootapp;
 
-@SpringBootTest(classes = TicketManagerBackendApplication.class)
+@SpringBootTest(classes = Springbootapp.class)
 class TicketManagerBackendApplicationTests {
 
 	@Test
