@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+// Login.js
+import React, { useState, useEffect } from 'react'; 
+import { useDispatch, useSelector } from 'react-redux'; 
 import AuthService from '../services/AuthService';
 import { loginSuccess, loginFailure } from '../redux/slicers/authSlice';
 import { useNavigate } from 'react-router-dom';
+import '../styles/Login.css'; 
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -11,29 +13,25 @@ const Login = () => {
     const navigate = useNavigate();
     const authState = useSelector(state => state.auth);
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        try {
-            // No need to expect token, just check for a valid response
-            const user = await AuthService.login(username, password);
-            dispatch(loginSuccess(user));  // Update Redux with authenticated user details
-            navigate("/home");  // Navigate to home page after login
-        } catch (err) {
-            dispatch(loginFailure('Invalid credentials. Please try again.'));
-        }
-    };
+	const handleLogin = async (e) => {
+	    e.preventDefault();
+	    try {
+	        const user = await AuthService.login(username, password);
+	        dispatch(loginSuccess(user));
+	        navigate("/home");
+	    } catch (err) {
+	        dispatch(loginFailure('Invalid credentials. Please try again.'));
+	    }
+	};
 
     useEffect(() => {
         console.log(authState);
-        if (authState.isAuthenticated) {
-            navigate("/home");  // Redirect to home if already authenticated
-        }
-    }, [authState, navigate]);
+    }, [authState]); 
 
     return (
-        <div>
-            <h2>Login</h2>
-            <form onSubmit={handleLogin}>
+        <div className="login-container">
+            <form className="login-form" onSubmit={handleLogin}>
+                <h2>Login</h2>
                 <div>
                     <label>Username:</label>
                     <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />

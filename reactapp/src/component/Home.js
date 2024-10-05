@@ -3,10 +3,10 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import AuthService from '../services/AuthService';
 import { logout } from '../redux/slicers/authSlice';
-import './Home.css';
+import '../styles/Home.css';
 import ProtectedRoute from '../services/ProtectedRoute';
 
-const HomePage = () => {
+const Home = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -32,4 +32,4 @@ const HomePage = () => {
     );
 };
 
-export default HomePage;
+export default Home;
