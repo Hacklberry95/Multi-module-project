@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import services.UserService;
 
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpMethod;
 
 @Configuration
 @Profile ("test")
@@ -29,9 +30,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {    	
         http
             .authorizeHttpRequests(authz -> authz
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight requests
                 .requestMatchers("/login", "/logout").permitAll()
                 .requestMatchers("/api/**").permitAll() // TODO: .authenticated when we deploy
                 .anyRequest().authenticated()
@@ -77,7 +79,7 @@ public class SecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**")
+                registry.addMapping("/api/auth/**")
                         .allowedOrigins("http://localhost:3000") // Allow your React app's origin
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")

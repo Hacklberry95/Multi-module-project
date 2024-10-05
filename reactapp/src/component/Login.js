@@ -13,6 +13,7 @@ const Login = () => {
         try {
             const user = await AuthService.login(username, password);
             dispatch(loginSuccess(user));
+			console.log("SUCCESSFUL LOGIN ATTEMPT");
             window.location.href = "/home"; // Redirect to home page after login
         } catch (err) {
             dispatch(loginFailure('Invalid credentials. Please try again.'));

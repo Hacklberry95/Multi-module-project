@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8081'; // Your Spring Boot API base URL
+const API_URL = 'http://localhost:8081/api/auth'; // Your Spring Boot API base URL
 
 const AuthService = {
     login: async (username, password) => {
