@@ -10,7 +10,7 @@ const authSlice = createSlice({
     reducers: {
         loginSuccess(state, action) {
             state.isAuthenticated = true;
-            state.user = action.payload;
+            state.user = action.payload;  // Store user info in state
             state.error = null;
         },
         loginFailure(state, action) {

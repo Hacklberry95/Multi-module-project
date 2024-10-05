@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 import Login from './component/Login';
-import UsersList from './component/UsersList';
+import Home from './component/Home';
 
 function App() {
     return (
@@ -13,7 +13,7 @@ function App() {
                     <Routes>
                         <Route path="/" element={<Login />} />
                         <Route path="/login" element={<Login />} />
-                        <Route path="/home" element={<UsersList />} />
+                        <Route path="/home" element={<Home />} />
                         {/* Add more routes as needed */}
                     </Routes>
                 </div>
