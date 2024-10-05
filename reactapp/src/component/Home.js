@@ -1,23 +1,35 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import AuthService from '../services/AuthService';
+import { logout } from '../redux/slicers/authSlice';
+import './Home.css';
+import ProtectedRoute from '../services/ProtectedRoute';
 
+const HomePage = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-
-const Home = () => {
-    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-	const navigate = useNavigate();
-
-
-    if (!isAuthenticated) {
-        navigate("/login");
-    }
+    const handleLogout = async () => {
+        try {
+            await AuthService.logout(); // Call the logout service
+            dispatch(logout()); // Update Redux state
+            navigate('/login'); // Redirect to login page
+        } catch (error) {
+            console.error('Logout failed', error);
+        }
+    };
 
     return (
-        <div>
-            <h1>Welcome to the Home Page</h1>
-        </div>
+        <ProtectedRoute>
+            <div className="home-container">
+                <h1>Welcome to the Home Page</h1>
+                <button className="logout-button" onClick={handleLogout}>
+                    Logout
+                </button>
+            </div>
+        </ProtectedRoute>
     );
 };
 
-export default Home;
+export default HomePage;

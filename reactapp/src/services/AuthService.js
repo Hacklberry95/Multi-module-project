@@ -35,6 +35,16 @@ const AuthService = {
             throw new Error('An error occurred while logging in');
         }
     },
+	logout: async () => {
+	        const response = await fetch(`${API_URL}/logout`, {
+	            method: 'GET',
+	            credentials: 'include', // Include cookies in the request
+	        });
+
+	        if (!response.ok) {
+	            throw new Error('Logout failed');
+	        }
+	},
 };
 
 export default AuthService;
