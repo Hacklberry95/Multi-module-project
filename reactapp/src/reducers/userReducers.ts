@@ -1,12 +1,32 @@
 import { GET_USERS, USER_ERROR } from '../actions/types';
 
-const initialState = {
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+interface UserError {
+  msg: string;
+  status?: number | null;
+}
+
+export interface UserState {
+  users: User[];
+  loading: boolean;
+  error: UserError | null;
+}
+
+const initialState: UserState = {
   users: [],
   loading: true,
   error: null,
 };
 
-export default function userReducer(state = initialState, action) {
+export default function userReducers(
+  state = initialState,
+  action: any
+): UserState {
   switch (action.type) {
     case GET_USERS:
       return {

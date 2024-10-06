@@ -7,12 +7,20 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 
 // Create a root container for rendering in React 18
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const rootElement = document.getElementById('root');
 
-root.render(
-  <Provider store={store}>
-    <App />
-  </Provider>
-);
+if (!rootElement) {
+    console.error('Root element not found');
+} else {
+    const root = ReactDOM.createRoot(rootElement);
+
+    root.render(
+        <Provider store={store}>
+            <React.StrictMode>
+                <App />
+            </React.StrictMode>
+        </Provider>
+    );
+}
 
 reportWebVitals();

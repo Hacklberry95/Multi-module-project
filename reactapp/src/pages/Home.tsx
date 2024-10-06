@@ -6,11 +6,11 @@ import { logout } from '../redux/slicers/authSlice';
 import '../styles/Home.css';
 import ProtectedRoute from '../services/ProtectedRoute';
 
-const Home = () => {
+const Home: React.FC = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handleLogout = async () => {
+    const handleLogout = async (): Promise<void> => {
         try {
             await AuthService.logout(); // Call the logout service
             dispatch(logout()); // Update Redux state
