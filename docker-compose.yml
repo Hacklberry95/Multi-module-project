@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: TicketManagerDB
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  springboot-app:
+    build: /home/dimitrios/Desktop/Eclipse/Eclipse Projects/Multi-module-project/springboot-app/
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/TicketManagerDB
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456
+
+  reactapp:
+    build: /home/dimitrios/Desktop/Eclipse/Eclipse Projects/Multi-module-project/reactapp/
+    ports:
+      - "3000:80"
+    depends_on:
+      - springboot-app
+
+volumes:
+  postgres_data:
+
