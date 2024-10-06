@@ -1,20 +1,19 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import AuthService from '../controllers/AuthController';
-import { logout } from '../redux/slicers/authSlice';
+import { AppDispatch } from '../redux/store';
+import { logout } from '../redux/actions/sessionActions';
 import '../styles/Home.css';
 import ProtectedRoute from '../controllers/ProtectedRoute';
 
 const Home: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
     const handleLogout = async (): Promise<void> => {
         try {
-            await AuthService.logout(); // Call the logout service
-            dispatch(logout()); // Update Redux state
-            navigate('/login'); // Redirect to login page
+            await dispatch(logout()); 
+            navigate('/login');
         } catch (error) {
             console.error('Logout failed', error);
         }

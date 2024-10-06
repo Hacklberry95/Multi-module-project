@@ -1,23 +1,32 @@
-import React, { useEffect, ReactNode } from 'react'; // Ensure React import is included
+import React, { useEffect, ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { RootState } from '../redux/store'; // Adjust this path based on your project structure
+import { RootState } from '../redux/store';
 
 interface ProtectedRouteProps {
-    children: ReactNode; // Expect children to be of type ReactNode
+    children: ReactNode;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-    const authState = useSelector((state: RootState) => state.auth); // Use RootState for typing
+    const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated); // Make sure to use the same slice
+    const sessionLoading = useSelector((state: RootState) => state.session.loading);
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!authState.isAuthenticated) {
-            navigate('/login'); // Redirect to login if not authenticated
+        // Only navigate if the session is fully loaded and the user is not authenticated
+        if (!sessionLoading && !isAuthenticated) {
+            console.log('Redirecting to /login because user is not authenticated');
+            navigate('/login');
         }
-    }, [authState.isAuthenticated, navigate]); // Only depend on isAuthenticated
+    }, [isAuthenticated, sessionLoading, navigate]);
 
-    return <>{authState.isAuthenticated ? children : null}</>; // Render children if authenticated
+    // If the session is still loading, show a loading spinner or empty component
+    if (sessionLoading) {
+        return <div>Loading...</div>;
+    }
+
+    // If authenticated, render the children components
+    return isAuthenticated ? <>{children}</> : null;
 };
 
 export default ProtectedRoute;

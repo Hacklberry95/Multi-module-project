@@ -1,26 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client'; // This is the updated import for React 18
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import store from './redux/store';
+import App from './App';
 
-// Create a root container for rendering in React 18
-const rootElement = document.getElementById('root');
+const container = document.getElementById('root');
+const root = createRoot(container!);
 
-if (!rootElement) {
-    console.error('Root element not found');
-} else {
-    const root = ReactDOM.createRoot(rootElement);
-
-    root.render(
-        <Provider store={store}>
-            <React.StrictMode>
-                <App />
-            </React.StrictMode>
-        </Provider>
-    );
-}
-
-reportWebVitals();
+root.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+);

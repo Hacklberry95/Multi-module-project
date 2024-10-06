@@ -38,7 +38,7 @@ public class SecurityConfig {
             )
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight requests
-                .requestMatchers("/login", "/logout").permitAll()
+                .requestMatchers("/login", "/logout", "/session").permitAll()
                 .requestMatchers("/api/**").permitAll() // TODO: .authenticated when we deploy
                 .anyRequest().authenticated()
             )

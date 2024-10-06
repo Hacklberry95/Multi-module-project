@@ -1,31 +1,53 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux'; 
-import AuthService from '../controllers/AuthController';
-import { loginSuccess, loginFailure } from '../redux/slicers/authSlice';
+import { login } from '../redux/actions/sessionActions';
+import { AppDispatch } from '../redux/store'; 
+import { RootState } from '../redux/store';
 import { useNavigate } from 'react-router-dom';
+import { validateSession } from '../redux/actions/sessionActions';
 import '../styles/Login.css'; 
 
 const Login: React.FC = () => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const authState = useSelector((state: any) => state.auth); // Type this more specifically based on your auth state structure
+    const hasNavigatedRef = useRef(false); 
 
-    const handleLogin = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
+
+    const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+    const sessionLoading = useSelector((state: RootState) => state.session.loading);
+
+    const handleLogin = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
-        try {
-            const user = await AuthService.login(username, password);
-            dispatch(loginSuccess(user));
-            navigate("/home");
-        } catch (err) {
-            dispatch(loginFailure('Invalid credentials. Please try again.'));
-        }
+        dispatch(login(username, password));
     };
 
+
     useEffect(() => {
-        console.log(authState);
-    }, [authState]); 
+        console.log("useEffect - Session validation running");
+        console.log("isAuthenticated:", isAuthenticated);
+        console.log("sessionLoading:", sessionLoading);
+
+        if (!isAuthenticated && !localStorage.getItem('sessionChecked')) {
+            console.log("Validating session...");
+            dispatch(validateSession());
+            localStorage.setItem('sessionChecked', 'true');
+        }
+    }, [isAuthenticated, dispatch]);
+
+
+    useEffect(() => {
+        console.log("useEffect - Navigation check running");
+        console.log("sessionLoading:", sessionLoading, "isAuthenticated:", isAuthenticated, "hasNavigatedRef:", hasNavigatedRef.current);
+
+        if (!sessionLoading && isAuthenticated && !hasNavigatedRef.current) {
+            console.log("Navigating to /home");
+            hasNavigatedRef.current = true; 
+            navigate("/home");
+        }
+    }, [sessionLoading, isAuthenticated, navigate]);
+
 
     return (
         <div className="login-container">
