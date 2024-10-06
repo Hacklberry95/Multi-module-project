@@ -1,7 +1,5 @@
-// actions/userActions.ts
-
-import { GET_USERS, USER_ERROR } from './types';
-import { User, UserError } from '../models/User';
+import { GET_USERS, USER_ERROR } from '../types';
+import { User, UserError } from '../../models/User';
 
 
 // Define the action types for clarity

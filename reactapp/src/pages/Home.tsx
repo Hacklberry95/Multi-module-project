@@ -1,10 +1,10 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import AuthService from '../services/AuthService';
+import AuthService from '../controllers/AuthController';
 import { logout } from '../redux/slicers/authSlice';
 import '../styles/Home.css';
-import ProtectedRoute from '../services/ProtectedRoute';
+import ProtectedRoute from '../controllers/ProtectedRoute';
 
 const Home: React.FC = () => {
     const dispatch = useDispatch();

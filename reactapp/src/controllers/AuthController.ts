@@ -1,3 +1,5 @@
+import {LoginResponse, LoginError} from '../models/Login'
+
 const API_URL = 'http://localhost:8081/api/auth'; // Ensure this is the correct API endpoint
 
 const AuthService = {

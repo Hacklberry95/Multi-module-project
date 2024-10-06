@@ -1,4 +1,4 @@
-import { GET_USERS, USER_ERROR } from '../actions/types';
+import { GET_USERS, USER_ERROR } from '../types';
 
 interface User {
   id: number;

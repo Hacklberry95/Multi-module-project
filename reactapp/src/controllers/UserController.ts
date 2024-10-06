@@ -1,10 +1,8 @@
-// controllers/UserController.ts
-
 import axios from 'axios';
 import { Dispatch } from 'redux';
-import { GET_USERS, USER_ERROR } from '../actions/types'; // Ensure the path is correct
+import { GET_USERS, USER_ERROR } from '../redux/types'; // Ensure the path is correct
 import { User } from '../models/User'; // Import your User interface
-import { UserActions } from '../actions/userActions'; // Ensure UserActions is imported correctly
+import { UserActions } from '../redux/actions/userActions'; // Ensure UserActions is imported correctly
 import { CustomError, UserError } from "../models/User";
 
 const API_URL = 'http://localhost:8081/api/auth'; // Keep the base API URL here
