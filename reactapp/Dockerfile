@@ -22,9 +22,11 @@ FROM nginx:alpine
 # Copy the build files to Nginx's default directory
 COPY --from=build /app/build /usr/share/nginx/html
 
+# Copy the custom Nginx configuration file
+COPY nginx.conf /etc/nginx/nginx.conf
+
 # Expose port 80 for Nginx
 EXPOSE 80
 
 # Command to run Nginx
 CMD ["nginx", "-g", "daemon off;"]
-
