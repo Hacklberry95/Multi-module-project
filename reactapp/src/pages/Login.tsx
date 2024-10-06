@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'; 
 import { useDispatch, useSelector } from 'react-redux'; 
-import AuthService from '../services/AuthService';
+import AuthService from '../controllers/AuthController';
 import { loginSuccess, loginFailure } from '../redux/slicers/authSlice';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css'; 

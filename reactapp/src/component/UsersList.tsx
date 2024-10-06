@@ -1,19 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../redux/store'; // Import your RootState type
-import { getUsers } from '../actions/userActions';
-import { User } from '../actions/userActions';
-
-interface UserError {
-  msg: string;
-  status?: number | null;
-}
-
-interface UserState {
-  users: User[];
-  loading: boolean;
-  error: UserError | null;
-}
+import UserController from '../controllers/UserController';
+import { User, UserState } from '../models/User';
 
 const UsersList: React.FC = () => {
   const dispatch = useDispatch();
@@ -23,7 +12,7 @@ const UsersList: React.FC = () => {
   const { users, loading, error } = userState;
 
   useEffect(() => {
-    dispatch<any>(getUsers());
+    dispatch<any>(UserController.getUsers);
   }, [dispatch]);
 
   if (loading) return <p>Loading...</p>;
