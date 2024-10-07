@@ -11,6 +11,8 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
 
   springboot-app:
     build: /home/dimitrios/Desktop/Eclipse/Eclipse Projects/Multi-module-project/springboot-app/
@@ -19,9 +21,11 @@ services:
     depends_on:
       - postgres
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/TicketManagerDB
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: 123456
+      DB_URL: jdbc:postgresql://postgres:5432/TicketManagerDB
+      DB_USERNAME: postgres
+      DB_PASSWORD: 123456
+    networks:
+      - app-network
 
   reactapp:
     build: /home/dimitrios/Desktop/Eclipse/Eclipse Projects/Multi-module-project/reactapp/
@@ -29,7 +33,11 @@ services:
       - "3000:80"
     depends_on:
       - springboot-app
+    networks:
+      - app-network
 
 volumes:
   postgres_data:
 
+networks:
+  app-network:

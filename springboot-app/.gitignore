@@ -7,6 +7,8 @@ target/
 ###Ignore application.properties###
 src/main/resources/application.properties
 
+DBCredentials.env
+
 ### STS ###
 .apt_generated
 .classpath
