@@ -24,7 +24,7 @@ stages:
 test-backend:
   stage: test
   image: eclipse-temurin:21-jdk
-  before_script: apt-get update && apt-get install -y maven
+  before_script: apt-get update && apt-get install -y maven npm
   script:
     - mvn clean test
   only:
@@ -36,7 +36,6 @@ test-backend:
 build-frontend:
   stage: build
   image: node:16
-  before_script: apt-get update && apt-get install -y npm
   script:
     - cd reactapp  # Assuming your React app is in a folder called "frontend"
     - npm install
