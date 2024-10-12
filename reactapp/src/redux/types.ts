@@ -16,5 +16,3 @@ export const SESSION_VALIDATE = 'SESSION_VALIDATE';
 export type UserActionTypes =
     | { type: typeof GET_USERS; payload: User[] }
     | { type: typeof USER_ERROR; payload: { msg: string; status: number | null } };
-
-// Add more action types as needed for other entities
