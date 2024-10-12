@@ -12,7 +12,7 @@ const Home: React.FC = () => {
 
     const handleLogout = async (): Promise<void> => {
         try {
-            await dispatch(logout()); 
+            dispatch(logout()); 
             navigate('/login');
         } catch (error) {
             console.error('Logout failed', error);

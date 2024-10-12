@@ -22,7 +22,6 @@ public class DataSourceConfig {
         String dbUsername = dotenv.get("DB_USERNAME");
         String dbPassword = dotenv.get("DB_PASSWORD");
 
-        System.out.println("Connecting to DB URL: " + dbUrl);
         return DataSourceBuilder.create()
                 .url(dbUrl)
                 .username(dbUsername)
