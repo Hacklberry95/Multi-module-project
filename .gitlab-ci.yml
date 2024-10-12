@@ -42,7 +42,7 @@ build-frontend:
     - npm run build
   artifacts:
     paths:
-      - build/  # Save the build output as an artifact
+      - reactapp/build  # Save the build output as an artifact
   only:
     - branches
   tags:
