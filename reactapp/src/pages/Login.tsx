@@ -16,7 +16,7 @@ const Login: React.FC = () => {
     const navigate = useNavigate();
 
     const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-    const sessionLoading = useSelector((state: RootState) => state.session.loading);
+    //const sessionLoading = useSelector((state: RootState) => state.session.loading);
 
     const handleLogin = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
@@ -24,29 +24,23 @@ const Login: React.FC = () => {
     };
 
 
-    useEffect(() => {
-        console.log("useEffect - Session validation running");
-        console.log("isAuthenticated:", isAuthenticated);
-        console.log("sessionLoading:", sessionLoading);
+	useEffect(() => {
+	    console.log("useEffect - Session and Navigation check running");
+	    console.log("isAuthenticated:", isAuthenticated);
+	    console.log("hasNavigatedRef:", hasNavigatedRef.current);
 
-        if (!isAuthenticated && !localStorage.getItem('sessionChecked')) {
-            console.log("Validating session...");
-            dispatch(validateSession());
-            localStorage.setItem('sessionChecked', 'true');
-        }
-    }, [isAuthenticated, dispatch]);
+	    if (!isAuthenticated && !localStorage.getItem('sessionChecked')) {
+	        console.log("Validating session...");
+	        dispatch(validateSession());
+	        localStorage.setItem('sessionChecked', 'true');
+	    }
 
-
-    useEffect(() => {
-        console.log("useEffect - Navigation check running");
-        console.log("sessionLoading:", sessionLoading, "isAuthenticated:", isAuthenticated, "hasNavigatedRef:", hasNavigatedRef.current);
-
-        if (!sessionLoading && isAuthenticated && !hasNavigatedRef.current) {
-            console.log("Navigating to /home");
-            hasNavigatedRef.current = true; 
-            navigate("/home");
-        }
-    }, [sessionLoading, isAuthenticated, navigate]);
+	    if (isAuthenticated && !hasNavigatedRef.current) {
+	        console.log("Navigating to /home");
+	        hasNavigatedRef.current = true; 
+	        navigate("/home");
+	    }
+	}, [isAuthenticated, dispatch, navigate]);
 
 
     return (

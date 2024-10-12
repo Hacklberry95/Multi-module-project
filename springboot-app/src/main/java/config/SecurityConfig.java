@@ -16,7 +16,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import jakarta.servlet.http.HttpServletResponse;
 import services.UserService;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 
 @Configuration
