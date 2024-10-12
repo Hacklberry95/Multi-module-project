@@ -26,8 +26,8 @@ test-backend:
   image: eclipse-temurin:21-jdk
   before_script: apt-get update && apt-get install -y maven npm
   script:
+    - mvn package
     - mvn clean test
-    - mvn build
   only:
     - branches  # Only run on branch pushes (e.g., feature branches)
   tags:
