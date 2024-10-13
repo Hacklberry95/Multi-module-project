@@ -1,4 +1,4 @@
-name: Mirror to GitLab
+name: Mirror GitHub to GitLab
 
 on:
   push:
@@ -8,19 +8,21 @@ on:
 jobs:
   mirror:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Check out the repository
         uses: actions/checkout@v3
 
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
-          echo "$GITLAB_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/github-ssh
+          chmod 600 ~/.ssh/github-ssh
           ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
-          ssh -vT git@gitlab.com  # Verbose SSH output to test connectivity
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git config core.sshCommand "ssh -i ~/.ssh/github-ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
       - name: Push to GitLab
         run: |
           git remote add gitlab git@gitlab.com:Jimant2/ticket-manager.git
-          git push gitlab main
+          git push --mirror gitlab
