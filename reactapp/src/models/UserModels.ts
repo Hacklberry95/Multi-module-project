@@ -1,6 +1,7 @@
 export interface User {
   id: number;
-  name: string;
+  username : string;
+  roles: string;
   email: string;
 }
 export interface UserError {

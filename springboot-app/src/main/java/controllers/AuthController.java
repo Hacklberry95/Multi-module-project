@@ -50,7 +50,7 @@ public class AuthController {
             // Create a session and associate it with the SecurityContext
             HttpSession session = request.getSession(true); // true = create session if it doesn't exist
             session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
-
+            System.out.print("USER IS LOGGED IN!!!");
             return ResponseEntity.ok(Map.of("authenticated", true, "user", authRequest.getUsername()));
 
         } catch (BadCredentialsException e) {

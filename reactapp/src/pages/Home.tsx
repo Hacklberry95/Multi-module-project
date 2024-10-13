@@ -12,7 +12,8 @@ const Home: React.FC = () => {
 
     const handleLogout = async (): Promise<void> => {
         try {
-            dispatch(logout()); 
+           await dispatch(logout()); 
+			console.log("Reactapp - logout");
             navigate('/login');
         } catch (error) {
             console.error('Logout failed', error);

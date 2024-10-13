@@ -1,4 +1,4 @@
-import { User } from "../models/User";
+import { User } from "../models/UserModels";
 
 // USER TYPES
 export const GET_USERS = 'GET_USERS';
