@@ -8,23 +8,24 @@ import ProtectedRoute from './controllers/ProtectedRoute';
 import { checkAuthentication } from './redux/actions/sessionActions';
 
 const App: React.FC = () => {
-	const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-	const dispatch = useDispatch<AppDispatch>();
+    const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+    const dispatch = useDispatch<AppDispatch>();
 
-	    useEffect(() => {
-	        dispatch(checkAuthentication()); // Check authentication on app load
-	    }, 
-		[dispatch]);
-	
+    useEffect(() => {
+        dispatch(checkAuthentication()); // Check authentication on app load
+    }, [dispatch]);
+
     return (
         <Provider store={store}>
-		<Router>
-		    <Routes>
-		        <Route path="/login" element={isAuthenticated ? <Navigate to="/home" replace /> : <Login />} />
-		        <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-		        {/* Other routes */}
-		    </Routes>
-		</Router>
+            <Router>
+                <Routes>
+                    {/* Redirect root path based on authentication */}
+                    <Route path="/" element={<Navigate to={isAuthenticated ? "/home" : "/login"} replace />} />
+                    <Route path="/login" element={isAuthenticated ? <Navigate to="/home" replace /> : <Login />} />
+                    <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+                    {/* Other routes */}
+                </Routes>
+            </Router>
         </Provider>
     );
 };
