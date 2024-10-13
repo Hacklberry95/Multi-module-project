@@ -28,4 +28,6 @@ jobs:
       - name: Push to GitLab (mirror only branches)
         run: |
           git remote add gitlab git@gitlab.com:Jimant2/ticket-manager.git
-          git push gitlab main development  # Push branches only, no hidden refs
+          git fetch  # Ensure all branches are fetched
+          git push gitlab main  # Push main branch
+          git push gitlab development  # Push development branch
