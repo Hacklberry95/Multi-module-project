@@ -1,14 +1,23 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { AppDispatch } from '../redux/store';
-import { logout } from '../redux/actions/sessionActions';
+import { AppDispatch, RootState } from '../redux/store';
+import { logout } from '../redux/actions/authActions';
 import '../styles/Home.css';
 import ProtectedRoute from '../controllers/ProtectedRoute';
 
 const Home: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
+	const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+	
+	useEffect(() => {
+		    if (!isAuthenticated) {
+		        console.log("Navigating to /home");
+		        navigate("/login");
+		    }
+		}, [isAuthenticated, dispatch, navigate]);
+
 
     const handleLogout = async (): Promise<void> => {
         try {

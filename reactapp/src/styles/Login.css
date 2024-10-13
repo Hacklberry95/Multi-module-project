@@ -11,49 +11,40 @@
 
 .login-form {
     background-color: white; /* White background for the form */
-    padding: 20px;
+    padding: 20px; /* Padding around the form */
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
     width: 300px; /* Fixed width for the form */
-}
-
-.login-form h2 {
-    margin-bottom: 20px; /* Spacing below the title */
-    font-size: 24px; /* Title font size */
-    color: #333; /* Dark text color */
+    text-align: center;
 }
 
 .login-form div {
     margin-bottom: 15px; /* Spacing between input fields */
+    display: flex;
+    flex-direction: column;
 }
 
-.login-form label {
-    margin-bottom: 5px; /* Spacing below label */
-    display: block; /* Labels should take a full line */
-    font-weight: bold; /* Bold labels */
-    color: #555; /* Darker gray for labels */
-}
-
-.login-form input {
-    width: 100%; /* Full width for inputs */
-    padding: 10px; /* Padding inside inputs */
-    border: 1px solid #ccc; /* Light gray border */
-    border-radius: 4px; /* Rounded corners for inputs */
-    font-size: 16px; /* Font size for inputs */
+.login-form input, .login-form button {
+    width: 100%; /* Full width for inputs and button */
+    padding: 10px; /* Padding inside inputs and button */
+    box-sizing: border-box; /* Ensures padding doesn't affect total width */
+    font-size: 16px; /* Font size for inputs and button */
 }
 
 .login-form button {
-    width: 100%; /* Full width for button */
-    padding: 10px;
     border: none;
     border-radius: 4px;
     background-color: #007BFF; /* Primary button color */
     color: white; /* White text */
-    font-size: 16px; /* Font size for button */
     cursor: pointer; /* Pointer cursor on hover */
     transition: background-color 0.3s; /* Transition for hover effect */
 }
 
 .login-form button:hover {
     background-color: #0056b3; /* Darker shade on hover */
+}
+.error-message {
+    color: red; /* Error text in red */
+    margin-top: 10px; /* Add some space above the error message */
+    font-size: 14px; /* Font size for the error message */
 }

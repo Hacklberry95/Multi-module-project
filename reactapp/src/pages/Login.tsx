@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'; 
-import { login } from '../redux/actions/sessionActions';
+import { login } from '../redux/actions/authActions';
 import { AppDispatch } from '../redux/store'; 
 import { RootState } from '../redux/store';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +12,7 @@ const Login: React.FC = () => {
 
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-
+	const error = useSelector((state: RootState) => state.auth.error);
     const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
 
     const handleLogin = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -22,7 +22,6 @@ const Login: React.FC = () => {
 
 
 	useEffect(() => {
-	    console.log("useEffect - Session and Navigation check running");
 	    console.log("isAuthenticated:", isAuthenticated);
 
 	    if (isAuthenticated) {
@@ -35,7 +34,7 @@ const Login: React.FC = () => {
     return (
         <div className="login-container">
             <form className="login-form" onSubmit={handleLogin}>
-                <h2>Login</h2>
+                <h1>Login</h1>
                 <div>
                     <label>Username:</label>
                     <input 
@@ -55,6 +54,7 @@ const Login: React.FC = () => {
                     />
                 </div>
                 <button type="submit">Login</button>
+				{error && <p className="error-message">{error}</p>}
             </form>
         </div>
     );

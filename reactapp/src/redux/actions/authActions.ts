@@ -6,7 +6,6 @@ import config from '../../config';
 import { User }  from '../../models/UserModels';
 import { loginSuccess, loginFailure, logoutAction } from '../slicers/authSlice';
 
-// Login Action
 export const login = (
   username: string,
   password: string
@@ -21,12 +20,12 @@ export const login = (
 
     dispatch(loginSuccess(response.data.user));
   } catch (error: any) {
+	console.log("RUNNING THROUGH LOGIN FAILURE RANDOMLY");
     const errorMessage = error.response?.data?.message || 'Login failed';
     dispatch(loginFailure(errorMessage));
   }
 };
 
-// Logout Action
 export const logout = (): ThunkAction<void, RootState, unknown, Action<string>> => async (dispatch) => {
   try {
     await axios.post(`${config.apiBaseUrl}/auth/logout`, {}, { withCredentials: true });
@@ -45,21 +44,16 @@ export const checkAuthentication = (): ThunkAction<void, RootState, unknown, Act
         if (response.status === 200) {
             const data = response.data;
             if (data.authenticated) {
-                // Assuming the response includes these properties, adjust as needed
                 const user: User = {
-                    id: data.user.id,         // Make sure this exists in your response
+                    id: data.user.id,         
                     username: data.user.username,
-                    email: data.user.email,   // Ensure this exists
-                    roles: data.user.roles     // Ensure this exists
+                    email: data.user.email,   
+                    roles: data.user.roles   
                 }; 
-                dispatch(loginSuccess(user)); // Pass the User object
-            } else {
-                dispatch(loginFailure('Not authenticated'));
-            }
-        } else {
-            dispatch(loginFailure('Failed to check authentication status'));
-        }
+                dispatch(loginSuccess(user));
+            } 
+		}
     } catch (error: any) {
-        dispatch(loginFailure(error.message));
+        dispatch(logoutAction());
     }
 };

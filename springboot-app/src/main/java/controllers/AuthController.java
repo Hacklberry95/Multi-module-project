@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
@@ -50,7 +51,7 @@ public class AuthController {
             // Create a session and associate it with the SecurityContext
             HttpSession session = request.getSession(true); // true = create session if it doesn't exist
             session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
-            System.out.print("USER IS LOGGED IN!!!");
+            System.out.print("USER IS LOGGED IN!!!" + "\n");
             return ResponseEntity.ok(Map.of("authenticated", true, "user", authRequest.getUsername()));
 
         } catch (BadCredentialsException e) {
@@ -58,14 +59,17 @@ public class AuthController {
         }
     }
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@AuthenticationPrincipal UserDetails userDetails) {
-    	System.out.print("USER IS LOGGED OUT!!!");
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+        request.getSession().invalidate();
+        SecurityContextHolder.clearContext();
+        System.out.println("USER IS LOGGED OUT!!!");
         return ResponseEntity.ok("Logout successful");
     }
+    
     @GetMapping("/session")
     public ResponseEntity<?> checkSession(Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {
-        	System.out.print("USER IS AUTHENTICATED!!!" + authentication);
+        	System.out.print("USER IS AUTHENTICATED!!!" + "\n");
             return ResponseEntity.ok().body(Map.of("authenticated", true, "user", authentication.getName()));
         }
         return ResponseEntity.ok().body(Map.of("authenticated", false));
