@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - development
 
 jobs:
   mirror:
@@ -12,6 +13,8 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch full history to prevent shallow clone errors
 
       - name: Set up SSH
         run: |
@@ -22,7 +25,7 @@ jobs:
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           git config core.sshCommand "ssh -i ~/.ssh/github-ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
-      - name: Push to GitLab
+      - name: Push to GitLab (mirror)
         run: |
           git remote add gitlab git@gitlab.com:Jimant2/ticket-manager.git
-          git push --mirror gitlab
+          git push --mirror gitlab  # Full repository mirror, force-push all changes
