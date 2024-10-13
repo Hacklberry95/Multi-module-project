@@ -1,56 +1,65 @@
+import axios from 'axios';
 import { ThunkAction } from 'redux-thunk';
-import { AnyAction } from 'redux';
+import { Action } from 'redux';
 import { RootState } from '../store';
-import { loginSuccess, loginFailure, clearSession } from '../slicers/authSlice';
-import { setSession } from '../slicers/authSlice'; 
+import config from '../../config';
+import { User }  from '../../models/UserModels';
+import { loginSuccess, loginFailure, logoutAction } from '../slicers/authSlice';
 
+// Login Action
 export const login = (
   username: string,
   password: string
-): ThunkAction<void, RootState, unknown, AnyAction> => async (dispatch) => {
+): ThunkAction<void, RootState, unknown, Action<string>> => async (dispatch) => {
   try {
-    const response = await fetch('http://localhost:8081/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-      credentials: 'include',
-    });
+	const response = await axios.post(`${config.apiBaseUrl}/auth/login`, {
+	  username,
+	  password,
+	}, {
+	  withCredentials: true
+	});
 
-    if (response.ok) {
-      const data = await response.json();
-      dispatch(loginSuccess(data.user));
-      dispatch(setSession({ authenticated: true, user: data.user })); // Session is updated after login
-    } else {
-      throw new Error('Login failed');
-    }
+    dispatch(loginSuccess(response.data.user));
   } catch (error: any) {
-    dispatch(loginFailure(error.message));
+    const errorMessage = error.response?.data?.message || 'Login failed';
+    dispatch(loginFailure(errorMessage));
   }
 };
 
-export const logout = (): ThunkAction<void, RootState, unknown, AnyAction> => async (dispatch) => {
+// Logout Action
+export const logout = (): ThunkAction<void, RootState, unknown, Action<string>> => async (dispatch) => {
   try {
-    await fetch('http://localhost:8081/api/auth/logout', { method: 'POST', credentials: 'include' });
-    dispatch(clearSession());
+    await axios.post(`${config.apiBaseUrl}/auth/logout`, {}, { withCredentials: true });
+    dispatch(logoutAction());
   } catch (error: any) {
-    dispatch(loginFailure(error.message));
+    const errorMessage = error.response?.data?.message || 'Logout failed';
+    dispatch(loginFailure(errorMessage));
   }
 };
 
-export const validateSession = (): ThunkAction<void, RootState, unknown, AnyAction> => async (dispatch) => {
+
+export const checkAuthentication = (): ThunkAction<void, RootState, unknown, Action<string>> => async (dispatch) => {
     try {
-        const response = await fetch('http://localhost:8081/api/auth/session', { credentials: 'include' });
-        if (response.ok) {
-            const data = await response.json();
-            console.log('Session validation successful:', data);
-            
-            // Dispatch the setSession action to update the authentication state
-            dispatch(setSession({ authenticated: data.authenticated, user: data.user }));
+        const response = await axios.get(`${config.apiBaseUrl}/auth/session`, { withCredentials: true });
+
+        if (response.status === 200) {
+            const data = response.data;
+            if (data.authenticated) {
+                // Assuming the response includes these properties, adjust as needed
+                const user: User = {
+                    id: data.user.id,         // Make sure this exists in your response
+                    username: data.user.username,
+                    email: data.user.email,   // Ensure this exists
+                    roles: data.user.roles     // Ensure this exists
+                }; 
+                dispatch(loginSuccess(user)); // Pass the User object
+            } else {
+                dispatch(loginFailure('Not authenticated'));
+            }
         } else {
-            throw new Error('Session validation failed');
+            dispatch(loginFailure('Failed to check authentication status'));
         }
     } catch (error: any) {
-        console.error('Session validation error:', error.message);
-        dispatch(logout()); // Logout on session validation error
+        dispatch(loginFailure(error.message));
     }
 };

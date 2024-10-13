@@ -1,52 +1,29 @@
+// authSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-interface User {
-  id: number;
-  username: string;
-  email: string;
-}
-
-interface AuthState {
-  isAuthenticated: boolean;
-  user: User | null;
-  error: string | null;
-}
-
-const initialState: AuthState = {
-  isAuthenticated: false,
-  user: null,
-  error: null,
-};
+import { User } from '../../models/UserModels';
+import { initialState } from '../../models/LoginModels';
 
 const authSlice = createSlice({
-  name: 'auth',
-  initialState,
-  reducers: {
-    loginSuccess(state, action: PayloadAction<User>) {
-      state.isAuthenticated = true;
-      state.user = action.payload;
-      state.error = null;
+    name: 'auth',
+    initialState,
+    reducers: {
+        loginSuccess(state, action: PayloadAction<User>) {
+            state.isAuthenticated = true;
+            state.user = action.payload;
+            state.error = null;
+        },
+        loginFailure(state, action: PayloadAction<string>) {
+            state.isAuthenticated = false;
+            state.user = null;
+            state.error = action.payload;
+        },
+        logoutAction(state) {
+            state.isAuthenticated = false;
+            state.user = null;
+            state.error = null;
+        },
     },
-    loginFailure(state, action: PayloadAction<string>) {
-      state.isAuthenticated = false;
-      state.user = null;
-      state.error = action.payload;
-    },
-    logout(state) {
-      state.isAuthenticated = false;
-      state.user = null;
-      state.error = null;
-    },
-    clearSession(state) {
-      state.isAuthenticated = false;
-      state.user = null;
-    },
-    setSession(state, action: PayloadAction<{ authenticated: boolean; user: User | null }>) {
-      state.isAuthenticated = action.payload.authenticated;
-      state.user = action.payload.user;
-    },
-  },
 });
 
-export const { loginSuccess, loginFailure, logout, clearSession, setSession } = authSlice.actions;
+export const { loginSuccess, loginFailure, logoutAction } = authSlice.actions;
 export default authSlice.reducer;
