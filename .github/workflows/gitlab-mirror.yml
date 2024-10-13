@@ -1,0 +1,42 @@
+name: Mirror GitHub to GitLab
+
+on:
+  push:
+    branches:
+      - main
+      - development
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch full history to prevent shallow clone errors
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY_BASE64 }}" | base64 --decode > ~/.ssh/github-ssh
+          chmod 600 ~/.ssh/github-ssh
+          ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git config core.sshCommand "ssh -i ~/.ssh/github-ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+
+      - name: Push to GitLab (mirror only branches)
+        run: |
+          git remote add gitlab git@gitlab.com:Jimant2/ticket-manager.git
+          git fetch origin  # Ensure all branches are fetched
+          
+          # Push main branch
+          git push gitlab main  
+
+          # Check if development branch exists and push
+          if git show-ref --verify --quiet refs/remotes/origin/development; then
+            git checkout -b development origin/development  # Create local branch if it doesn't exist
+            git push gitlab development  # Push development branch
+          else
+            echo "Development branch does not exist, skipping push."
+          fi
