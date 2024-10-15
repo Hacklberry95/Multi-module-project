@@ -1,7 +1,7 @@
-# Use Node.js as the base image for building the React app
-FROM node:16 AS build
+# Development Stage: Use Node.js for hot reloading
+FROM node:16 AS dev
 
-# Set a working directory
+# Set working directory
 WORKDIR /app
 
 # Copy package.json and package-lock.json for dependencies
@@ -13,20 +13,11 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Build the React app
-RUN npm run build
+# Expose port for the React app
+EXPOSE 3000
 
-# Use Nginx to serve the built app
-FROM nginx:alpine
+# Set environment variable for Docker container polling
+ENV CHOKIDAR_USEPOLLING=true
 
-# Copy the build files to Nginx's default directory
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Copy the custom Nginx configuration file
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Expose port 80 for Nginx
-EXPOSE 80
-
-# Command to run Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start the app in development mode with hot reloading
+CMD ["npm", "start"]
