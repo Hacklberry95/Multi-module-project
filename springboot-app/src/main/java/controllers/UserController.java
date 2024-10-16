@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import models.UserModel;
-import services.UserService;
+import services.UserServiceInterface;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +14,7 @@ import java.util.Optional;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserServiceInterface userService;
 
     @GetMapping("/users")
     public ResponseEntity<List<UserModel>> getAllUsers() {

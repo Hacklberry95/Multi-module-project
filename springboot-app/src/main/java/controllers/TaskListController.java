@@ -3,7 +3,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import models.TaskList;
-import services.TaskListService;
+import services.TaskListServiceInterface;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,7 +13,7 @@ import java.util.Optional;
 public class TaskListController {
 
     @Autowired
-    private TaskListService taskListService;
+    private TaskListServiceInterface taskListService;
 
     @GetMapping
     public List<TaskList> getAllTaskLists() {

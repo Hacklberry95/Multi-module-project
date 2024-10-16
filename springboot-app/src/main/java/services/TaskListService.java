@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TaskListService {
+public class TaskListService implements TaskListServiceInterface{
 
     @Autowired
     private TaskListRepository taskListRepository;

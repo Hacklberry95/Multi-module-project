@@ -4,17 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import models.Task;
-import services.TaskService;
+import services.TaskServiceInterface;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/tasks")
-@CrossOrigin(origins = "http://localhost:3000")  // Adjust the origin as per your React app's URL
+@CrossOrigin(origins = "http://localhost:3000")
 public class TaskController {
 
     @Autowired
-    private TaskService taskService;
+    private TaskServiceInterface taskService;
 
     @GetMapping
     public List<Task> getAllTasks() {

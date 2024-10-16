@@ -14,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import jakarta.servlet.http.HttpServletResponse;
-import services.UserService;
+import services.UserServiceInterface;
 
 import org.springframework.http.HttpMethod;
 
@@ -22,9 +22,9 @@ import org.springframework.http.HttpMethod;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final UserService userService;
+    private final UserServiceInterface userService;
 
-    public SecurityConfig(UserService userService) {
+    public SecurityConfig(UserServiceInterface userService) {
         this.userService = userService;
     }
 
