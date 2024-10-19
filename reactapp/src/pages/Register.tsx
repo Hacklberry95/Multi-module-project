@@ -32,7 +32,7 @@ const Register: React.FC = () => {
 		dispatch(login(username, password));
         navigate("/home"); // Redirect to home if authenticated
       }
-    }, [isAuthenticated, navigate, dispatch]);
+    }, [isAuthenticated, navigate, dispatch, username, password]);
 
   return (
     <div className="register-container">
