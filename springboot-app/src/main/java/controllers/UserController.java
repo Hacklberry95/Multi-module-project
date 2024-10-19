@@ -4,13 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import dto.UserRegistrationDto;
 import models.UserModel;
 import services.UserServiceInterface;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 public class UserController {
 
     @Autowired
@@ -27,10 +29,15 @@ public class UserController {
         Optional<UserModel> user = userService.findUserById(id);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
-
-    @PostMapping
-    public UserModel createUser(@RequestBody UserModel user) {
-        return userService.saveUser(user);
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(@RequestBody UserRegistrationDto userRegistrationDto) {
+        try {
+        	System.out.println(userRegistrationDto);
+            userService.registerNewUser(userRegistrationDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
@@ -52,5 +59,7 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
+    
+    
 }
 

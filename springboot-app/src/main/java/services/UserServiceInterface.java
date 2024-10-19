@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import dto.UserRegistrationDto;
 import models.UserModel;
 
 public interface UserServiceInterface extends UserDetailsService  {
@@ -15,6 +16,8 @@ public interface UserServiceInterface extends UserDetailsService  {
     UserModel saveUser(UserModel user);
 
     void deleteUser(Long id);
+    
+    UserModel registerNewUser(UserRegistrationDto userRegistrationDto);
 
     String encodePassword(String rawPassword);
 }

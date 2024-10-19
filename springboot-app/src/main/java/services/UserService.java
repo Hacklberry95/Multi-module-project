@@ -2,10 +2,11 @@ package services;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import dto.UserRegistrationDto;
 import models.UserModel;
 import repos.UserRepository;
 
@@ -61,6 +62,23 @@ public class UserService implements UserServiceInterface{
                 .disabled(false)
                 .build();
     }
+    public UserModel registerNewUser(UserRegistrationDto userRegistrationDto) {
+        // Check if the username is already taken
+        if (userRepository.findByUsername(userRegistrationDto.getUsername()) != null) {
+            throw new IllegalStateException("Username already exists");
+        }
+
+        // Create a new user
+        UserModel newUser = new UserModel();
+        newUser.setUsername(userRegistrationDto.getUsername());
+        newUser.setPasswordHash(encodePassword(userRegistrationDto.getPassword()));
+        newUser.setEmail(userRegistrationDto.getEmail());
+        newUser.setRoles("ROLE_USER");
+
+        // Save to database
+        return userRepository.save(newUser);
+    }
+    
 
     public String encodePassword(String rawPassword) {
         return new BCryptPasswordEncoder().encode(rawPassword);

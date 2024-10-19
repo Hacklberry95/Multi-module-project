@@ -1,6 +1,6 @@
-package controllers;
+package dto;
 
-public class AuthRequest {
+public class AuthRequestDto {
     private String username;
     private String password_hash;
 

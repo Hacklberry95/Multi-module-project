@@ -1,7 +1,6 @@
 package controllers;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import java.util.Map;
 
@@ -12,13 +11,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import dto.AuthRequestDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -31,7 +30,7 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest, HttpServletRequest request) {
+    public ResponseEntity<?> login(@RequestBody AuthRequestDto authRequest, HttpServletRequest request) {
         if (authRequest.getUsername() == null || authRequest.getUsername().isEmpty()) {
             return ResponseEntity.badRequest().body("Username is required");
         }
@@ -44,7 +43,6 @@ public class AuthController {
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
             );
-
             // Set the authentication in the security context
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
