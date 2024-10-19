@@ -67,7 +67,7 @@ public class AuthController {
     @GetMapping("/session")
     public ResponseEntity<?> checkSession(Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {
-        	System.out.print("USER IS AUTHENTICATED!!!" + "\n");
+        	System.out.print("USER IS AUTHENTICATED!!!" + "\n" + "authentication.getName: " + authentication.getName());
             return ResponseEntity.ok().body(Map.of("authenticated", true, "user", authentication.getName()));
         }
         return ResponseEntity.ok().body(Map.of("authenticated", false));

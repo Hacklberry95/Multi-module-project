@@ -68,7 +68,7 @@ export const checkAuthentication = (): ThunkAction<void, RootState, unknown, Act
             if (data.authenticated) {
                 const user: User = {
                     id: data.user.id,         
-                    username: data.user.username,
+                    username: data.user,
                     email: data.user.email,   
                     roles: data.user.roles   
                 }; 
