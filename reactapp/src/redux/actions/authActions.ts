@@ -4,7 +4,28 @@ import { Action } from 'redux';
 import { RootState } from '../store';
 import config from '../../config';
 import { User }  from '../../models/UserModels';
-import { loginSuccess, loginFailure, logoutAction } from '../slicers/authSlice';
+import { loginSuccess, loginFailure, logoutAction, registrationFailure, registrationSuccess } from '../slicers/authSlice';
+
+
+export const register = (
+  username: string,
+  email: string,
+  password: string
+): ThunkAction<void, RootState, unknown, Action<string>> => async (dispatch) => {
+  try {
+    const response = await axios.post(`${config.apiBaseUrl}/user/register`, {
+      username,
+      email,
+      password,
+    });
+    // Dispatch success action with user data
+	const user: User = response.data;
+    dispatch(registrationSuccess(user));
+  } catch (error: any) {
+    const errorMessage = error.response?.data?.message || 'Registration failed';
+    dispatch(registrationFailure(errorMessage)); 
+  }
+};
 
 export const login = (
   username: string,
@@ -41,6 +62,7 @@ export const checkAuthentication = (): ThunkAction<void, RootState, unknown, Act
     try {
         const response = await axios.get(`${config.apiBaseUrl}/auth/session`, { withCredentials: true });
 
+		console.log('Session Response:', response.data);
         if (response.status === 200) {
             const data = response.data;
             if (data.authenticated) {

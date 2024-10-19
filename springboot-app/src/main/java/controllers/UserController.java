@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import dto.UserRegistrationDto;
+import dto.UserRegistrationResponseDto;
 import models.UserModel;
 import services.UserServiceInterface;
 import java.util.List;
@@ -30,11 +31,19 @@ public class UserController {
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody UserRegistrationDto userRegistrationDto) {
+    public ResponseEntity<?> registerUser(@RequestBody UserRegistrationDto userRegistrationDto) {
         try {
-        	System.out.println(userRegistrationDto);
-            userService.registerNewUser(userRegistrationDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+        	UserModel newUser = userService.registerNewUser(userRegistrationDto);
+
+            // Convert UserModel to UserDto
+            UserRegistrationResponseDto userDto = new UserRegistrationResponseDto(
+            	newUser.getId(),
+                newUser.getUsername(),
+                newUser.getEmail(),
+                newUser.getRoles()
+            );
+            System.out.println(userDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
         } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

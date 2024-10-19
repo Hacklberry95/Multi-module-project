@@ -4,6 +4,7 @@ import { Provider, useSelector, useDispatch } from 'react-redux';
 import store, { RootState, AppDispatch } from './redux/store';
 import Login from './pages/Login';
 import Home from './pages/Home';
+import Register from './pages/Register';
 import ProtectedRoute from './controllers/ProtectedRoute';
 import { checkAuthentication } from './redux/actions/authActions';
 
@@ -21,6 +22,7 @@ const App: React.FC = () => {
                 <Routes>
                     <Route path="/" element={<Navigate to={isAuthenticated ? "/home" : "/login"} replace />} />
                     <Route path="/login" element={isAuthenticated ? <Navigate to="/home" replace /> : <Login />} />
+					<Route path="/register" element={<Register />} />
                     <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
                 </Routes>
             </Router>

@@ -63,11 +63,13 @@ public class UserService implements UserServiceInterface{
                 .build();
     }
     public UserModel registerNewUser(UserRegistrationDto userRegistrationDto) {
-        // Check if the username is already taken
+        // Check if the username & email is already taken
         if (userRepository.findByUsername(userRegistrationDto.getUsername()) != null) {
             throw new IllegalStateException("Username already exists");
         }
-
+        if (userRepository.findByEmail(userRegistrationDto.getEmail()) != null) {
+            throw new IllegalStateException("Email already exists");
+        }
         // Create a new user
         UserModel newUser = new UserModel();
         newUser.setUsername(userRegistrationDto.getUsername());

@@ -5,5 +5,6 @@ import models.UserModel;
 public interface UserRepository extends JpaRepository<UserModel, Long> {
     // Custom query methods can go here if needed
 	UserModel findByUsername(String username);
+	UserModel findByEmail(String email);
 }
 

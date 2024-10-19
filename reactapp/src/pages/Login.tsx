@@ -20,7 +20,10 @@ const Login: React.FC = () => {
         dispatch(login(username, password));
     };
 
-
+	const handleRegisterRedirect = () => {
+	        navigate('/register');
+	    };
+		
 	useEffect(() => {
 	    console.log("isAuthenticated:", isAuthenticated);
 
@@ -54,8 +57,10 @@ const Login: React.FC = () => {
                     />
                 </div>
                 <button type="submit">Login</button>
+				<button onClick={handleRegisterRedirect} className="button">Register</button>
 				{error && <p className="error-message">{error}</p>}
             </form>
+			
         </div>
     );
 };
