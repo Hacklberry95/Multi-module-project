@@ -1,22 +1,20 @@
 package services;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import dto.UserRegistrationDto;
+import models.CustomUserDetails;
+import models.Role;
+import models.UserModel;
+import repos.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import dto.UserRegistrationDto;
-import models.UserModel;
-import repos.UserRepository;
-
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserServiceInterface{
+public class UserService implements UserServiceInterface {
 
     private final UserRepository userRepository;
 
@@ -42,48 +40,36 @@ public class UserService implements UserServiceInterface{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserModel user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
+        // Find user in database
+        UserModel userModel = userRepository.findByUsername(username);
+        if (userModel == null) {
+            throw new UsernameNotFoundException("User not found with username: " + username);
         }
-
-        String[] rolesArray = user.getRoles().split(","); // Split comma-separated roles
-        List<GrantedAuthority> authorities = Arrays.stream(rolesArray)
-                                                   .map(SimpleGrantedAuthority::new)
-                                                   .collect(Collectors.toList());
-
-        // Build and return UserDetails object
-        return org.springframework.security.core.userdetails.User.withUsername(user.getUsername())
-                .password(user.getPasswordHash()) // Use the stored password
-                .authorities(authorities) // Pass the list of authorities
-                .accountExpired(false)
-                .accountLocked(false)
-                .credentialsExpired(false)
-                .disabled(false)
-                .build();
+        // Create CustomUserDetails object from UserModel
+        return new CustomUserDetails(userModel);
     }
+
     public UserModel registerNewUser(UserRegistrationDto userRegistrationDto) {
-        // Check if the username & email is already taken
+        // Check if username or email already exists
         if (userRepository.findByUsername(userRegistrationDto.getUsername()) != null) {
             throw new IllegalStateException("Username already exists");
         }
         if (userRepository.findByEmail(userRegistrationDto.getEmail()) != null) {
             throw new IllegalStateException("Email already exists");
         }
+
         // Create a new user
         UserModel newUser = new UserModel();
         newUser.setUsername(userRegistrationDto.getUsername());
         newUser.setPasswordHash(encodePassword(userRegistrationDto.getPassword()));
         newUser.setEmail(userRegistrationDto.getEmail());
-        newUser.setRoles("ROLE_USER");
+        newUser.setRoles(Role.USER); 
 
-        // Save to database
+        // Save the new user to the database
         return userRepository.save(newUser);
     }
-    
 
     public String encodePassword(String rawPassword) {
         return new BCryptPasswordEncoder().encode(rawPassword);
     }
 }
-

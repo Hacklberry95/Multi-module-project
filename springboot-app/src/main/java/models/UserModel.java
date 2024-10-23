@@ -2,11 +2,16 @@ package models;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
-public class UserModel {
+public class UserModel{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +28,10 @@ public class UserModel {
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime created_at = LocalDateTime.now();
-
+    
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String roles;
+    private Role roles;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Project> projects;
@@ -67,12 +73,12 @@ public class UserModel {
         return created_at;
     }
     
-    public String getRoles() {
+    public Role getRoles() {
         return roles;
     }
     
-    public void setRoles(String roles) {
-        this.roles = roles;
+    public void setRoles(Role role) {
+        this.roles = role;
     }
 
     public List<Project> getProjects() {
