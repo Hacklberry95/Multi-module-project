@@ -9,13 +9,15 @@ import java.util.List;
 
 public class CustomUserDetails implements UserDetails {
 
-    private String username;
+	private Long id;
+	private String username;
     private String password;
     private String email;
     private Role role;
 
     // Constructor to initialize CustomUserDetails from UserModel
     public CustomUserDetails(UserModel userModel) {
+    	this.id = userModel.getId();
         this.username = userModel.getUsername();
         this.password = userModel.getPasswordHash(); 
         this.email = userModel.getEmail();
@@ -37,7 +39,10 @@ public class CustomUserDetails implements UserDetails {
     public String getUsername() {
         return username;
     }
-
+    
+    public Long getId() {
+    	return id;
+    }
     // You can implement additional methods if needed for email, etc.
     public String getEmail() {
         return email;
